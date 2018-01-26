@@ -18,15 +18,15 @@ namespace VuScheduleApi.Controllers
         }
 
         [HttpGet("{groupId}")]
-        public async Task<Subject[]> Get(string groupId)
+        public async Task<IActionResult> Get(string groupId)
         {
             try
             {
-                return await _service.GetSubjectsAsync("mif", groupId);
+                return Ok(await _service.GetSubjectsAsync("mif", groupId));
             }
             catch
             {
-                return null;
+                return BadRequest();
             }
         }
     }

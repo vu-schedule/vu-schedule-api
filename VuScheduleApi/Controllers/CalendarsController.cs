@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Flurl;
+using Flurl.Http;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -23,6 +26,14 @@ namespace VuScheduleApi.Controllers
         {
             try
             {
+                var task = "https://script.google.com/macros/s/<secret-code>/exec"
+                    .SetQueryParams(new
+                    {
+                        Group = groupId,
+                        Time = DateTime.UtcNow.ToString("dd/MM/yyyy HH:mm:ss")
+                    })
+                    .GetAsync();
+
                 var calendar = await _service.GetCalendarAsync(subjectEntries.GroupBy(x=>x.Title).Select(x=> 
                 {
                     var subgroups = x.GroupBy(y => y.Subgroup).Select(y=>y.First().Subgroup).ToList();
@@ -36,12 +47,14 @@ namespace VuScheduleApi.Controllers
                 }).ToArray(), "mif", groupId);
                 var encodedCalendar = Encoding.UTF8.GetBytes(calendar);
 
+                await task;
+
                 var response = File(encodedCalendar, "application/octet-stream");
                 return response;
             }
             catch
             {
-                return null;
+                return BadRequest();
             }
         }
     }

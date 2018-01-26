@@ -18,15 +18,15 @@ namespace VuScheduleApi.Controllers
         }
 
         [HttpGet]
-        public async Task<StudyProgram[]> Get()
+        public async Task<IActionResult> Get()
         {
             try
             {
-                return await _service.GetProgramsAsync("mif");
+                return Ok(await _service.GetProgramsAsync("mif"));
             }
             catch
             {
-                return null;
+                return BadRequest();
             }
         }
     }
