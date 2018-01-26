@@ -30,7 +30,7 @@ namespace VuScheduleApi
                 if (!options.Any(x => x.Title == c.Title))
                     continue;
 
-                if (c.Subgroup != null && !options.Any(x => x.Subgroups.Contains((int)c.Subgroup)))
+                if (c.Subgroup != null && !options.Where(x=>x.Title == c.Title).Any(x => x.Subgroups.Contains((int)c.Subgroup)))
                     continue;
 
                 calendarEvents.Add(new CalendarEvent

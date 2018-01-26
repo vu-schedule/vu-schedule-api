@@ -51,7 +51,7 @@ namespace VuScheduleApi
                 {
                     foreach (var s in g)
                     {
-                        s.Subgroup = 0;
+                        s.Subgroup = null;
                     }
                 }
             }
