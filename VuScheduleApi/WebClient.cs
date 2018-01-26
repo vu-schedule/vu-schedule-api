@@ -8,12 +8,12 @@ namespace VuScheduleApi
     public class WebClient
     {
         private string _baseUrl;
-        private string _sessionId;
+        private string _semesterId;
 
-        public WebClient(string baseUrl, string sessionId)
+        public WebClient(string baseUrl, string semesterId)
         {
             _baseUrl = baseUrl;
-            _sessionId = sessionId;
+            _semesterId = semesterId;
         }
 
         public async Task<string> GetProgramsPageAsync(string facultyId)
@@ -21,7 +21,7 @@ namespace VuScheduleApi
             return await
                     (await _baseUrl
                            .AppendPathSegment(facultyId)
-                           .WithCookie("sessionid", _sessionId)
+                           .WithCookie("sessionid", _semesterId)
                            .GetAsync())
                    .Content
                    .ReadAsStringAsync();
@@ -34,7 +34,7 @@ namespace VuScheduleApi
                            .AppendPathSegment(facultyId)
                            .AppendPathSegment("groups")
                            .AppendPathSegment(groupId)
-                           .WithCookie("sessionid", _sessionId)
+                           .WithCookie("used_semester", _semesterId)
                            .GetAsync())
                    .Content
                    .ReadAsStringAsync();

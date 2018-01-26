@@ -13,7 +13,7 @@ namespace VuScheduleApi
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            var client = new WebClient("https://mif.vu.lt/timetable", "ji3fs9qivs0lrq77xa68ao2bny410i53");
+            var client = new WebClient("https://mif.vu.lt/timetable", "78");
             services.AddSingleton(new SubjectsService(client));
             services.AddSingleton(new StudyService(client));
             services.AddSingleton(new CalendarService(client));
