@@ -11,13 +11,17 @@ namespace VuScheduleApi
 {
     public class Startup
     {
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            var client = new WebClient("https://mif.vu.lt/timetable", "ji3fs9qivs0lrq77xa68ao2bny410i53");
+            services.AddSingleton(new SubjectsService(client));
+            services.AddSingleton(new StudyService(client));
+            services.AddSingleton(new CalendarService(client));
+
+            services.AddCors();
+            services.AddMvc();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
@@ -25,10 +29,12 @@ namespace VuScheduleApi
                 app.UseDeveloperExceptionPage();
             }
 
-            app.Run(async (context) =>
-            {
-                await context.Response.WriteAsync("Hello World!");
-            });
+            app.UseCors(builder =>
+                    builder.AllowAnyHeader()
+                           .AllowAnyMethod()
+                           .AllowAnyOrigin());
+
+            app.UseMvc();
         }
     }
 }
