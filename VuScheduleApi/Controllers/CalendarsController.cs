@@ -26,12 +26,13 @@ namespace VuScheduleApi.Controllers
         {
             try
             {
-                var task = "https://script.google.com/macros/s/<secret-code>/exec"
+                var task = "https://script.google.com/macros/s/AKfycbyUlYFDJQylwNYhuMvgGJF6-zjO_ByVP9O_ViCIEis8xho-1xot/exec"
                     .SetQueryParams(new
                     {
                         Group = groupId,
-                        Time = DateTime.UtcNow.ToString("dd/MM/yyyy HH:mm:ss")
-                    })
+                        Time = DateTime.UtcNow.ToString("dd/MM/yyyy HH:mm:ss"),
+                        IP = HttpContext.Connection.RemoteIpAddress
+            })
                     .GetAsync();
 
                 var calendar = await _service.GetCalendarAsync(subjectEntries.GroupBy(x=>x.Title).Select(x=> 

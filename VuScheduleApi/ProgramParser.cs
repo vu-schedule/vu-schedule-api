@@ -22,8 +22,8 @@ namespace VuScheduleApi
 
             foreach (var n in nodes)
             {
-                var studyProgram = new StudyProgram();
-                studyProgram.Title = n.DocumentNode.SelectSingleNode("//h4").FirstChild.InnerHtml;
+                var studyProgram =
+                    new StudyProgram {Title = n.DocumentNode.SelectSingleNode("//h4").FirstChild.InnerHtml};
 
                 if (studyProgram.Title == "Bendrosios universitetinės studijos" || studyProgram.Title == "Erasmus")
                     continue;
@@ -32,12 +32,12 @@ namespace VuScheduleApi
 
                 foreach (var cn in courseNodes)
                 {
-                    var linksNodes = cn.DocumentNode.SelectNodes("//a");
+                    var linksNodes = cn.DocumentNode.SelectNodes("//a").ToArray();
                     var year = new StudyYear
                     {
-                        Title = CleanString(linksNodes.First().InnerHtml)
+                        Title = CleanString(cn.ParsedText.Split("<a").First())
                     };
-                    var groups = linksNodes.Skip(1).Select(x => new StudyGroup
+                    var groups = linksNodes.Select(x => new StudyGroup
                     {
                         Title = CleanString(x.InnerHtml),
                         Id = x.Attributes.First().Value.GetStringBefore("/").GetLastStringAfter("/")
